@@ -1,0 +1,45 @@
+float amp = 0.000;
+float volt = 0.000;
+float temp = 0.000;
+int r1 = 50000;
+int r2 = 10000;
+
+void setup() {
+Serial.begin(9600);
+pinMode(2, INPUT_PULLUP);
+pinMode(3, INPUT_PULLUP);
+}
+void loop() {
+int sel_vol =digitalRead(3);
+int sel_amp =digitalRead(2);
+
+while (!sel_vol) {
+int analog_value = analogRead(A1);
+temp = (analog_value * 5.0) / 1024.0;
+volt = temp / (r2/(r1+r2));
+
+if (volt < 0.1)
+{
+ volt = 0.0;
+}
+Serial.print("v=");
+Serial.println(volt);
+delay(500);
+digitalRead(3);
+}
+while (!sel_amp){
+int analog_value = analogRead(A0);
+temp = (analog_value * 5.0) / 1024.0;
+volt = temp / (r2/(r1+r2));
+amp = (volt / 62)*1000;
+
+if (amp < 0.1)
+{
+ amp = 0.0;
+}
+Serial.print("a=");
+Serial.println(amp);
+delay(500);
+}
+}
+
